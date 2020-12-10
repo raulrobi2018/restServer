@@ -1,8 +1,10 @@
+/* When this file is executed, it will configure all the content it has, 
+so at this moment the 'process' object for example will be available here */
+require("./config/config");
+
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-
-const port = process.env.PORT || 3000;
 
 /* ********************************************* */
 /* These both 'use' sentences are middleweares. 
@@ -45,6 +47,6 @@ app.delete("/user", (req, res) => {
     res.json("Delete user");
 });
 
-app.listen(3000, () => {
-    console.log(`Listening port ${port}`);
+app.listen(process.env.PORT, () => {
+    console.log(`Listening port ${process.env.PORT}`);
 });
