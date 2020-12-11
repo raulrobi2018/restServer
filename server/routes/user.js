@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 
 const bcrypt = require("bcrypt");
+const _ = require("underscore");
 
 const User = require("../models/user");
 
@@ -37,23 +38,30 @@ app.post("/user", (req, res) => {
 
 app.put("/user/:id", (req, res) => {
     let id = req.params.id;
-    let body = req.body;
+    // The pick function of underscore plugin, takes only the params we specify
+    // in the array, so the rest of the params will not be updated
+    let body = _.pick(req.body, ["name", "email", "img", "role", "estado"]);
 
-    User.findByIdAndUpdate(id, body, {new: true}, (err, userDB) => {
-        console.log(body);
+    User.findByIdAndUpdate(
+        id,
+        body,
+        // new: permit return the new object updated
+        // runValidators: controls the validator defined in the user model. In this case, the roles permmited
+        {new: true, runValidators: true},
+        (err, userDB) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
 
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
+            res.json({
+                ok: true,
+                user: userDB
             });
         }
-
-        res.json({
-            ok: true,
-            user: userDB
-        });
-    });
+    );
 });
 
 app.delete("/user", (req, res) => {
