@@ -3,6 +3,8 @@ so at this moment the 'process' object for example will be available here */
 require("./config/config");
 
 const express = require("express");
+const mongoose = require("mongoose");
+
 const app = express();
 const bodyParser = require("body-parser");
 
@@ -21,31 +23,23 @@ app.get("/", (req, res) => {
     res.json("Hello World");
 });
 
-app.post("/user", (req, res) => {
-    let body = req.body;
+app.use(require("./routes/user"));
 
-    if (body.name === undefined) {
-        res.status(400).json({
-            ok: false,
-            message: "The name is required"
-        });
-    } else {
-        res.json({
-            body
-        });
+mongoose.connect(
+    "mongodb://localhost:27017/my_database",
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+        useCreateIndex: true
+    },
+    (err) => {
+        if (err) {
+            throw err;
+        }
+        console.log("Database online");
     }
-});
-
-app.put("/user/:id", (req, res) => {
-    let id = req.params.id;
-    res.json({
-        id
-    });
-});
-
-app.delete("/user", (req, res) => {
-    res.json("Delete user");
-});
+);
 
 app.listen(process.env.PORT, () => {
     console.log(`Listening port ${process.env.PORT}`);
