@@ -43,6 +43,18 @@ let userSchema = new Schema({
     }
 });
 
+// Here we are adding a method to the schema
+// In this case, we are deleting the password from
+// the json object returned to the user
+// NOTE: DO NOT USE AN ARROW FUNCTION BECAUSE THE this OBJECT
+userSchema.methods.toJSON = function () {
+    let user = this;
+    let userObject = user.toObject();
+    delete userObject.password;
+
+    return userObject;
+};
+
 // Here we are using the unique-validator-mongoose plugin to set the
 // message for the response when we are duplicating a register
 // The PATH word must be between ' or ", not between `
