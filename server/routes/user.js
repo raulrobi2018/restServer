@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const _ = require("underscore");
 
 const User = require("../models/user");
+const {count} = require("../models/user");
 
 app.get("/user", (req, res) => {
     let from = req.query.from || 0;
@@ -24,9 +25,12 @@ app.get("/user", (req, res) => {
                 });
             }
 
-            res.json({
-                ok: true,
-                users
+            User.countDocuments({}, (err, count) => {
+                res.json({
+                    ok: true,
+                    users,
+                    count
+                });
             });
         });
 });
