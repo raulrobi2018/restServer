@@ -19,14 +19,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 /* ********************************************* */
 
-app.get("/", (req, res) => {
-    res.json("Hello World");
-});
-
 app.use(require("./routes/user"));
 
 mongoose.connect(
-    "mongodb://localhost:27017/my_database",
+    "mongodb://localhost:27017/cofee",
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,

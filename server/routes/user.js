@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+const User = require("../models/user");
+
 app.get("/user", (req, res) => {
     res.json("Hello user");
 });
@@ -8,16 +10,27 @@ app.get("/user", (req, res) => {
 app.post("/user", (req, res) => {
     let body = req.body;
 
-    if (body.name === undefined) {
-        res.status(400).json({
-            ok: false,
-            message: "The name is required"
-        });
-    } else {
+    let user = new User({
+        name: body.name,
+        email: body.email,
+        password: body.password,
+        role: body.role
+    });
+
+    // The err and userDb params are the response after mongoose saves the object
+    user.save((err, userDb) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+
         res.json({
-            body
+            ok: true,
+            user: userDb
         });
-    }
+    });
 });
 
 app.put("/user/:id", (req, res) => {

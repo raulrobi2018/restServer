@@ -20,6 +20,7 @@ let userSchema = new Schema({
         type: String
     },
     role: {
+        type: String,
         default: "USER_ROLE"
     },
     state: {
