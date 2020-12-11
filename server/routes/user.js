@@ -89,8 +89,33 @@ app.put("/user/:id", (req, res) => {
     );
 });
 
-app.delete("/user", (req, res) => {
-    res.json("Delete user");
+app.delete("/user/:id", (req, res) => {
+    let id = req.params.id;
+
+    User.findByIdAndRemove(id, (err, user) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+
+        console.log(user);
+
+        if (!user) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: "User not founded"
+                }
+            });
+        }
+
+        res.json({
+            ok: true,
+            user
+        });
+    });
 });
 
 module.exports = app;
