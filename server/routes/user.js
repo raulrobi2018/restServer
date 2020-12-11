@@ -14,7 +14,7 @@ app.get("/user", (req, res) => {
     from = Number(from);
     limit = Number(limit);
 
-    User.find({}, "name role state email img")
+    User.find({state: true}, "name role state email img")
         .skip(from)
         .limit(limit)
         .exec((err, users) => {
@@ -65,7 +65,7 @@ app.put("/user/:id", (req, res) => {
     let id = req.params.id;
     // The pick function of underscore plugin, takes only the params we specify
     // in the array, so the rest of the params will not be updated
-    let body = _.pick(req.body, ["name", "email", "img", "role", "estado"]);
+    let body = _.pick(req.body, ["name", "email", "img", "role", "state"]);
 
     User.findByIdAndUpdate(
         id,
@@ -92,15 +92,13 @@ app.put("/user/:id", (req, res) => {
 app.delete("/user/:id", (req, res) => {
     let id = req.params.id;
 
-    User.findByIdAndRemove(id, (err, user) => {
+    User.findByIdAndUpdate(id, {state: false}, {new: true}, (err, user) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
                 err
             });
         }
-
-        console.log(user);
 
         if (!user) {
             return res.status(400).json({
