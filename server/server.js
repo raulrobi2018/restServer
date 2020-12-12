@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(require("./routes/user"));
 
 mongoose.connect(
-    "mongodb://localhost:27017/cofee",
+    process.env.URLDB,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
