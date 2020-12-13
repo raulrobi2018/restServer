@@ -21,3 +21,13 @@ if (process.env.NODE_ENV === "dev") {
 }
 
 process.env.URLDB = urlDatabase;
+
+// ==============================
+// Expiring token
+// ==============================
+process.env.EXPIRE_DATE = 60 * 60 * 24 * 30;
+
+// ==============================
+// Seed for the token
+// ==============================
+process.env.SEED = process.env.SEED || "secret-seed-for-dev";
