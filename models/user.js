@@ -18,6 +18,7 @@ let userSchema = new Schema({
     email: {
         type: String,
         required: [true, "The e-mail is required"],
+        // Básicamente lo que hace es establecerlo como clave única
         unique: true
     },
     password: {

@@ -1,6 +1,7 @@
 /* When this file is executed, it will configure all the content it has, 
 so at this moment the 'process' object for example will be available here */
 require("./config/config");
+require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
