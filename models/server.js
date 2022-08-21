@@ -15,7 +15,7 @@ class Server {
     //Middlewares: extra functions to run in the server
     middlewares() {
         //CORS
-        // this.app.use(cors);
+        this.app.use(cors());
 
         //Body JSON reading and serialization
         this.app.use(express.json());
