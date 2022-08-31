@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const {Schema, model} = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 
 // Valid roles for role attribute
@@ -6,8 +6,6 @@ let validRoles = {
     values: ["ADMIN_ROLE", "USER_ROLE"],
     message: "{VALUE} is not a valid role"
 };
-
-let Schema = mongoose.Schema;
 
 let userSchema = new Schema({
     name: {
@@ -30,9 +28,10 @@ let userSchema = new Schema({
     },
     role: {
         type: String,
-        default: "USER_ROLE",
+        required: true,
+        default: "USER_ROLE"
         // only valid predifined roles
-        enum: validRoles
+        //enum: validRoles
     },
     state: {
         type: Boolean,
@@ -44,16 +43,17 @@ let userSchema = new Schema({
     }
 });
 
-// Here we are adding a method to the schema
-// In this case, we are deleting the password from
+// Here we are adding a method to the schema. Particulary we are overriding the toJSON method to
+// return the attributes that I want to return
+// In this case, we are deleting the password and the version from
 // the json object returned to the user
-// NOTE: DO NOT USE AN ARROW FUNCTION BECAUSE THE this OBJECT
+// NOTE: DO NOT USE AN ARROW FUNCTION BECAUSE THE I NEED THE this object and the this
+// I NEED THAT IT BE POINTING TO THE INTANCE CREATED
 userSchema.methods.toJSON = function () {
-    let user = this;
-    let userObject = user.toObject();
-    delete userObject.password;
-
-    return userObject;
+    //Here I'm extracting the __v and password and the rest of the attributes will be
+    //part of the user attribute
+    const {__v, password, ...user} = this.toObject();
+    return user;
 };
 
 // Here we are using the unique-validator-mongoose plugin to set the
@@ -61,4 +61,5 @@ userSchema.methods.toJSON = function () {
 // The PATH word must be between ' or ", not between `
 userSchema.plugin(uniqueValidator, {message: "{PATH} must be unique"});
 
-module.exports = mongoose.model("user", userSchema);
+//Automatically Mongoose will convert User to Users when create the table in the database
+module.exports = model("User", userSchema);
