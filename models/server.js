@@ -9,6 +9,9 @@ class Server {
         this.port = process.env.PORT;
         this.usersPath = "/api/users";
 
+        //Path to the authentication
+        this.authPath = "/api/auth";
+
         //Database conection
         this.connectDatabase();
 
@@ -37,6 +40,8 @@ class Server {
 
     //Application routes
     routes() {
+        //Configuration path for authentication
+        this.app.use(this.authPath, require("../routes/auth"));
         //Here we are configuring the path "/api/users" endpoint
         //for user requests
         this.app.use(this.usersPath, require("../routes/user"));

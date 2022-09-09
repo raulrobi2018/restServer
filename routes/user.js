@@ -6,7 +6,13 @@ const {
     emailExist,
     existUserById
 } = require("../helpers/db-validators");
-const {validateFields} = require("../middlewares/field-validator");
+
+const {
+    validateFields,
+    validateJWT,
+    isAdminRole,
+    hasRole
+} = require("../middlewares");
 
 const router = Router();
 
@@ -51,6 +57,11 @@ router.post(
 router.delete(
     "/:id",
     [
+        //If this middleware fails, the rest will not continue
+        validateJWT,
+        //Validate role
+        //        isAdminRole,
+        hasRole("ADMIN_ROLE", "VENTAS_ROLE"),
         //Check if the id is a valid Mongo Id
         check("id", "The ID is not valid").isMongoId(),
         //Check if the id exist

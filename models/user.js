@@ -50,9 +50,11 @@ let userSchema = new Schema({
 // NOTE: DO NOT USE AN ARROW FUNCTION BECAUSE THE I NEED THE this object and the this
 // I NEED THAT IT BE POINTING TO THE INTANCE CREATED
 userSchema.methods.toJSON = function () {
-    //Here I'm extracting the __v and password and the rest of the attributes will be
+    //Here I'm extracting the __v, the password and the _id. The rest of the attributes will be
     //part of the user attribute
-    const {__v, password, ...user} = this.toObject();
+    const {__v, password, _id, ...user} = this.toObject();
+    //After extract the _id we set the uid attribute to the user with the _id value extracted from the database
+    user.uid = _id;
     return user;
 };
 
