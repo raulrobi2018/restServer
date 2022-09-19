@@ -4,7 +4,6 @@ const user = require("../models/user");
 
 const validateJWT = async (req, res = response, next) => {
     const token = req.header("x-token");
-    console.log("token", token);
 
     if (!token) {
         return res.status(401).json({msg: "There isn't a token"});
@@ -41,8 +40,6 @@ const validateJWT = async (req, res = response, next) => {
             msg: "Token not valid"
         });
     }
-
-    next();
 };
 
 module.exports = {

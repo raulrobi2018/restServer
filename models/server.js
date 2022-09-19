@@ -7,10 +7,15 @@ class Server {
     constructor() {
         this.app = express();
         this.port = process.env.PORT;
-        this.usersPath = "/api/users";
 
-        //Path to the authentication
-        this.authPath = "/api/auth";
+        this.paths = {
+            //Path to the authentication
+            authPath: "/api/auth",
+            categiriesPath: "/api/categories",
+            productsPath: "/api/products",
+            searchPath: "/api/search",
+            usersPath: "/api/users"
+        };
 
         //Database conection
         this.connectDatabase();
@@ -41,10 +46,16 @@ class Server {
     //Application routes
     routes() {
         //Configuration path for authentication
-        this.app.use(this.authPath, require("../routes/auth"));
+        this.app.use(this.paths.authPath, require("../routes/auth"));
         //Here we are configuring the path "/api/users" endpoint
         //for user requests
-        this.app.use(this.usersPath, require("../routes/user"));
+        this.app.use(this.paths.usersPath, require("../routes/user"));
+        this.app.use(
+            this.paths.categiriesPath,
+            require("../routes/categories")
+        );
+        this.app.use(this.paths.productsPath, require("../routes/products"));
+        this.app.use(this.paths.searchPath, require("../routes/search"));
     }
 
     listening() {
