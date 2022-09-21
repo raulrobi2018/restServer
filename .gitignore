@@ -72,3 +72,7 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+
+# Images uploaded
+uploads/products/**.*
+uploads/users/**.*

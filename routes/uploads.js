@@ -1,6 +1,10 @@
 const {Router, response} = require("express");
 const {check} = require("express-validator");
-const {loadFile, updateImage} = require("../controllers/uploads");
+const {
+    loadFile,
+    showImage,
+    updateImageCloudinary
+} = require("../controllers/uploads");
 const {allowedCollections} = require("../helpers/db-validators");
 const {validateFiles} = require("../middlewares");
 const {validateFields} = require("../middlewares/field-validator");
@@ -19,7 +23,19 @@ router.put(
         ),
         validateFields
     ],
-    updateImage
+    updateImageCloudinary
+);
+
+router.get(
+    "/:collection/:id",
+    [
+        check("id", "The id should be a Mongo id valid").isMongoId(),
+        check("collection").custom((c) =>
+            allowedCollections(c, ["users", "products"])
+        ),
+        validateFields
+    ],
+    showImage
 );
 
 module.exports = router;
